@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/dynamic_lay"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:padding="@dimen/margin_10">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/dynamic_lay_time_today"
+            android:layout_width="@dimen/margin_70"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/dynamic_time_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="今天"
+                android:textStyle="bold"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/textsize_18"
+                />
+
+            <TextView
+                android:id="@+id/dynamic_time_minutes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal"
+                android:text="23分钟前"
+                android:textColor="@color/little_gray"
+                android:textSize="@dimen/textsize_12"
+                />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/dynamic_lay_time_date"
+            android:layout_width="@dimen/margin_70"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/dynamic_time_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09"
+                android:textColor="@color/dark_gray"
+                android:textStyle="bold"
+                android:textSize="@dimen/textsize_18"
+                />
+
+            <TextView
+                android:id="@+id/dynamic_time_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/dynamic_time_date"
+                android:layout_toRightOf="@id/dynamic_time_date"
+                android:text="八月"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/textsize_12"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/dynamic_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="在没有玩之前什么都想玩，现在玩过了就什么都没有感觉了,你说是不是"
+            android:textColor="@color/dark_gray"
+            android:textSize="@dimen/textsize_12"
+            />
+
+        <GridView
+            android:id="@+id/dynamic_imgs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            android:cacheColorHint="#00000000"
+            android:gravity="center"
+            android:horizontalSpacing="@dimen/margin_2"
+            android:listSelector="#00000000"
+            android:numColumns="3"
+            android:stretchMode="columnWidth"
+            >
+        </GridView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="@dimen/margin_10"
+            >
+
+            <TextView
+                android:id="@+id/dynamic_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:drawableLeft="@mipmap/img_swdetail_dynamic_comment"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:text="0"
+                android:textColor="@color/textcolor_littlegray"
+                android:textSize="@dimen/textsize_12"
+                />
+
+            <TextView
+                android:id="@+id/dynamic_praise"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/margin_20"
+                android:layout_toLeftOf="@id/dynamic_comment"
+                android:drawableLeft="@mipmap/img_swdetail_dynamic_praise"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:text="18"
+                android:textColor="@color/textcolor_littlegray"
+                android:textSize="@dimen/textsize_12"
+                />
+            <ImageView
+                android:id="@+id/dynamic_delete"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/margin_20"
+                android:layout_toLeftOf="@id/dynamic_praise"
+                android:src="@mipmap/icon_dynamic_delete"
+                android:scaleType="centerInside"
+                />
+
+        </RelativeLayout>
+
+        <net.xichiheng.yulewa.widget.MyListView
+            android:id="@+id/dynamic_comment_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e6e6e6"
+            android:divider="@null"
+            android:padding="@dimen/margin_5"></net.xichiheng.yulewa.widget.MyListView>
+    </LinearLayout>
+
+
+</LinearLayout>

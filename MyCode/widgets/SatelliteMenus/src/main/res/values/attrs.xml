@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SatelliteMenu">
+        <attr name="expandDuration" format="integer"/>
+        <attr name="closeOnClick" format="boolean"/>
+        <!--<attr name="totalSpacingDegree" format="float" />-->
+        <!--<attr name="satelliteDistance" format="dimension" />-->
+        <attr name="mainImage" format="reference"/>
+        <attr name="radius" format="dimension|reference"/>
+        <attr name="fromDegrees" format="float|reference"/>
+        <attr name="toDegrees" format="float|reference"/>
+    </declare-styleable>
+</resources>
