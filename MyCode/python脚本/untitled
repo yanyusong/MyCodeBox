@@ -1,0 +1,63 @@
+
+   
+
+    private SatelliteMenu mainMenus;
+
+    private void initMainMenus() {
+        frontFrame.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (mainMenus.getIsRotated()) {
+                    mainMenus.close();
+                    frontFrame.setVisibility(View.GONE);
+                    return true;
+                }
+                return false;
+            }
+        });
+        List<SatelliteMenuItem> menus = new ArrayList<>();
+        menus.add(new SatelliteMenuItem(0, R.mipmap.icon_satellitemenu_square));
+        menus.add(new SatelliteMenuItem(1, R.mipmap.icon_satellitemenu_party));
+        menus.add(new SatelliteMenuItem(2, R.mipmap.icon_satellitemenu_show));
+        menus.add(new SatelliteMenuItem(3, R.mipmap.icon_satellitemenu_bar));
+        menus.add(new SatelliteMenuItem(4, R.mipmap.icon_satellitemenu_ktv));
+        mainMenus.addItems(menus);
+        mainMenus.setMainItemClick(new SatelliteMenu.IMainItemClickListener() {
+            @Override
+            public void onClick(boolean rotated) {
+                if (rotated) {
+                    frontFrame.setVisibility(View.GONE);
+                } else {
+                    frontFrame.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        mainMenus.setItemsOnTouchListener(new SatelliteMenu.SateliteClickedListener() {
+            @Override
+            public void eventOccured(int id) {
+                if (frontFrame.getVisibility() == View.VISIBLE) {
+                    frontFrame.setVisibility(View.GONE);
+                }
+                switch (id) {
+                    case 0:
+                        switchFragment(getCurrentFragTag(), FragTag_SquareFragment);
+                        break;
+                    case 1:
+                        switchFragment(getCurrentFragTag(), FragTag_PartyFragment);
+                        break;
+                    case 2:
+                        switchFragment(getCurrentFragTag(), FragTag_ShowFragment);
+                        break;
+                    case 3:
+                        switchFragment(getCurrentFragTag(), FragTag_BarFragment);
+                        break;
+                    case 4:
+                        switchFragment(getCurrentFragTag(), FragTag_KTVFragment);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
