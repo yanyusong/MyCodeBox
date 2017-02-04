@@ -1,4 +1,4 @@
-package net.boyazhidao.cgb.model;
+package net.aibianli.ps.bean;
 
 /**
  * Created by mac on 16/3/17.
