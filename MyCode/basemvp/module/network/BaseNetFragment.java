@@ -91,11 +91,5 @@ public class BaseNetFragment<T extends BaseContract.IBasePresenter> extends Base
         this.mPresenter = presenter;
     }
 
-    @Override
-    public void onDestroy() {
-        mPresenter.destroy();
-        super.onDestroy();
-    }
-
 
 }

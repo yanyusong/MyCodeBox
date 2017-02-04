@@ -1,4 +1,4 @@
-package net.boyazhidao.cgb.utils.AnyVersion;
+package cn.aibianli.stockmanager.common.util.AnyVersion;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;

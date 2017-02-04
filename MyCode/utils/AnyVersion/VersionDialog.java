@@ -1,4 +1,4 @@
-package net.boyazhidao.cgb.utils.AnyVersion;
+package cn.aibianli.stockmanager.common.util.AnyVersion;
 
 import android.app.AlertDialog;
 import android.app.Application;
@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.text.Html;
 import android.view.WindowManager;
 
-import net.boyazhidao.cgb.R;
 
 /**
  * Created by Yoojia.Chen
@@ -18,35 +17,31 @@ class VersionDialog {
     private final AlertDialog dialog;
 
     public VersionDialog(final Application context, final Version version, final Downloads downloads) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.Theme_System_Alert)
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(version.name)
                 .setMessage(Html.fromHtml(version.note))
                 .setCancelable(false)
-                .setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
+                .setNegativeButton("稍后", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
                 })
-                .setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
+                .setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         downloads.submit(context, version);
-                        dialog.cancel();
+                        dialog.dismiss();
                     }
-                })
-                ;
+                });
         this.dialog = builder.create();
 
     }
 
-    public void show(){
-        this.dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        try{
+    public void show() {
+        if (dialog != null) {
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             dialog.show();
-        }catch (Exception e){
-            throw new IllegalArgumentException("Required " +
-                    "'<uses-permission android:name=\"android.permission.SYSTEM_ALERT_WINDOW\" />' !");
         }
     }
 }

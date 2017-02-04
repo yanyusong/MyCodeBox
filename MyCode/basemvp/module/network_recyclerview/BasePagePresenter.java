@@ -30,7 +30,7 @@ public abstract class BasePagePresenter<DATA, D> extends BaseNetPresenter implem
     protected volatile List<D> items = new ArrayList<>();// list中当前最新页的数据
     protected volatile List<D> allItems = new ArrayList<>();// list中当前所有的数据
 
-    private DefaultLoadingDialogShowConfig defaultLoadingShowConfig;
+    private DefaultLoadingDialogShowConfig defaultLoadingShowConfig = new DefaultLoadingDialogShowConfig(false, true, true);
 
     public BasePagePresenter(Context context, BasePageContract.IBaseRecyclerView mView) {
         super(mView);
