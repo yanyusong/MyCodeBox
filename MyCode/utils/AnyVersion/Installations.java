@@ -1,4 +1,4 @@
-package cn.aibianli.stockmanager.common.util.AnyVersion;
+package cn.aibianli.sdot.common.utils.AnyVersion;
 
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;

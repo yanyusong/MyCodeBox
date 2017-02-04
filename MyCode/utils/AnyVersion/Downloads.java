@@ -1,4 +1,4 @@
-package cn.aibianli.stockmanager.common.util.AnyVersion;
+package cn.aibianli.sdot.common.utils.AnyVersion;
 
 import android.app.DownloadManager;
 import android.content.Context;
@@ -29,6 +29,7 @@ class Downloads {
         DownloadManager download = (DownloadManager)context.getSystemService(Context.DOWNLOAD_SERVICE);
         Uri uri = Uri.parse(version.URL);
         DownloadManager.Request request = new DownloadManager.Request(uri);
+//        request.setDestinationInExternalPublicDir("/download/", version.name);
         request.setTitle(version.name);
         long id = download.enqueue(request);
         KEEPS.add(id);

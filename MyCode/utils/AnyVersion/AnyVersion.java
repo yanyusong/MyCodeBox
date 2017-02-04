@@ -1,5 +1,6 @@
-package cn.aibianli.stockmanager.common.util.AnyVersion;
+package cn.aibianli.sdot.common.utils.AnyVersion;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -40,19 +41,18 @@ public class AnyVersion {
     private String url;
     private RemoteHandler remoteHandler;
     private final Version currentVersion;
-    private final Handler mainHandler;
     private final ExecutorService threads;
     private final Installations installations;
     private final Downloads downloads;
 
-    public static AnyVersion getInstance(){
-        try{
+    public static AnyVersion getInstance() {
+        try {
             LOCK.lock();
             if (ANY_VERSION == null) {
                 throw new IllegalStateException("AnyVersion NOT init !");
             }
             return ANY_VERSION;
-        }finally {
+        } finally {
             LOCK.unlock();
         }
     }
@@ -62,18 +62,12 @@ public class AnyVersion {
         this.context = context;
         this.parser = parser;
         this.threads = Executors.newSingleThreadExecutor();
-        this.installations  = new Installations();
+        this.installations = new Installations();
         this.downloads = new Downloads();
-        this.mainHandler = new Handler(Looper.getMainLooper()){
-            @Override public void handleMessage(Message msg) {
-                Version version = (Version) msg.obj;
-                new VersionDialog(AnyVersion.this.context, version, AnyVersion.this.downloads).show();
-            }
-        };
         String versionName = null;
         int versionCode = 0;
         try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(),0);
+            PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             versionName = pi.versionName;
             versionCode = pi.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
@@ -84,19 +78,20 @@ public class AnyVersion {
 
     /**
      * 初始化 AnyVersion。
+     *
      * @param context 必须是 Application
-     * @param parser 服务端响应数据解析接口
+     * @param parser  服务端响应数据解析接口
      */
-    public static void init(Application context, VersionParser parser){
+    public static void init(Application context, VersionParser parser) {
         Preconditions.requiredMainUIThread();
-        try{
+        try {
             LOCK.lock();
             if (ANY_VERSION != null) {
                 Log.e(TAG, "Duplicate init AnyVersion ! This VersionParser  will be discard !");
                 Log.e(TAG, "AnyVersion recommend init on YOUR-Application.onCreate(...) .");
                 return;
             }
-        }finally {
+        } finally {
             LOCK.unlock();
         }
         if (context == null) {
@@ -112,23 +107,23 @@ public class AnyVersion {
     /**
      * 注册接收新版本通知的 Receiver。
      */
-    public static void registerReceiver(Context context, VersionReceiver receiver){
+    public static void registerReceiver(Context context, VersionReceiver receiver) {
         Broadcasts.register(context, receiver);
     }
 
     /**
      * 反注册接收新版本通知的 Receiver
      */
-    public static void unregisterReceiver(Context context, VersionReceiver receiver){
+    public static void unregisterReceiver(Context context, VersionReceiver receiver) {
         Broadcasts.unregister(context, receiver);
     }
 
     /**
      * 设置发现新版本时的回调接口。当 check(NotifyStyle.Callback) 时，此接口参数生效。
      */
-    public void setCallback(Callback callback){
+    public void setCallback(Callback callback) {
         Preconditions.requireInited();
-        if (callback == null){
+        if (callback == null) {
             throw new NullPointerException("Callback CANNOT be null !");
         }
         this.callback = callback;
@@ -137,7 +132,7 @@ public class AnyVersion {
     /**
      * 设置检测远程版本的 URL。在使用内置 RemoteHandler 时，URL 是必须的。
      */
-    public void setURL(String url){
+    public void setURL(String url) {
         Preconditions.requireInited();
         checkRequiredURL(url);
         this.url = url;
@@ -146,9 +141,9 @@ public class AnyVersion {
     /**
      * 设置自定义检测远程版本数据的接口
      */
-    public void setCustomRemote(RemoteHandler remoteHandler){
+    public void setCustomRemote(RemoteHandler remoteHandler) {
         Preconditions.requireInited();
-        if (remoteHandler == null){
+        if (remoteHandler == null) {
             throw new NullPointerException("RemoteHandler CANNOT be null !");
         }
         this.remoteHandler = remoteHandler;
@@ -157,39 +152,49 @@ public class AnyVersion {
     /**
      * 检测新版本，并指定发现新版本的处理方式
      */
-    public void check(NotifyStyle style){
+    public void check(Activity context, NotifyStyle style) {
         createRemoteRequestIfNeed();
-        check(this.url, this.remoteHandler, style);
+        check(context, this.url, this.remoteHandler, style);
     }
 
     /**
      * 按指定的 URL，检测新版本，并指定发现新版本的处理方式
      */
-    public void check(String url, NotifyStyle style){
+    public void check(Activity context, String url, NotifyStyle style) {
         createRemoteRequestIfNeed();
-        check(url, this.remoteHandler, style);
+        check(context, url, this.remoteHandler, style);
     }
 
-    private void check(final String url, final RemoteHandler remote, final NotifyStyle style){
+    private void check(final Activity context, final String url, final RemoteHandler remote, final NotifyStyle style) {
         Preconditions.requireInited();
-        if (NotifyStyle.Callback.equals(style) && callback == null){
+        if (NotifyStyle.Callback.equals(style) && callback == null) {
             throw new NullPointerException("If reply by callback, callback CANNOT be null ! " +
                     "Call 'setCallback(...) to setup !'");
         }
         final Callback core = new Callback() {
-            @Override public void onVersion(Version remoteVersion) {
+            @Override
+            public void onVersion(Version remoteVersion) {
                 // 检查是否为新版本
-                if (remoteVersion == null) return;
-                if (currentVersion.code >= remoteVersion.code) return;
-                switch (style){
+                if (remoteVersion == null)
+                    return;
+                if (currentVersion.code >= remoteVersion.code)
+                    return;
+                switch (style) {
                     case Callback:
                         callback.onVersion(remoteVersion);
                         break;
                     case Broadcast:
-                        Broadcasts.send(context, remoteVersion);
+                        Broadcasts.send((Application) context.getApplicationContext(), remoteVersion);
                         break;
                     case Dialog:
-                        final Message msg = Message.obtain(ANY_VERSION.mainHandler, 0, remoteVersion);
+                        Handler dialogHandler = new Handler(Looper.getMainLooper()) {
+                            @Override
+                            public void handleMessage(Message msg) {
+                                Version version = (Version) msg.obj;
+                                new VersionDialog(context, version, AnyVersion.this.downloads).show();
+                            }
+                        };
+                        final Message msg = Message.obtain(dialogHandler, 0, remoteVersion);
                         msg.sendToTarget();
                         break;
                 }
@@ -202,23 +207,23 @@ public class AnyVersion {
     /**
      * 取消当前正在检测的工作线程
      */
-    public void cancelCheck(){
+    public void cancelCheck() {
         Preconditions.requireInited();
-        if (workingTask != null && !workingTask.isDone()){
+        if (workingTask != null && !workingTask.isDone()) {
             workingTask.cancel(true); // force interrupt
         }
     }
 
-    private void createRemoteRequestIfNeed(){
-        if (remoteHandler == null){
+    private void createRemoteRequestIfNeed() {
+        if (remoteHandler == null) {
             // 使用内置请求时，URL 地址是必须的。
             checkRequiredURL(this.url);
             remoteHandler = new SimpleRemoteHandler();
         }
     }
 
-    private void checkRequiredURL(String url){
-        if (TextUtils.isEmpty(url)){
+    private void checkRequiredURL(String url) {
+        if (TextUtils.isEmpty(url)) {
             throw new NullPointerException("URL CANNOT be null or empty !");
         }
     }
